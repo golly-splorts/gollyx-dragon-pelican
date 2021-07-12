@@ -1258,7 +1258,7 @@
 
           // Set the game title
           var gameTitleElem = document.getElementById('golly-game-title');
-          gameTitleElem.innerHTML = "Pseudo Sandbox";
+          gameTitleElem.innerHTML = "Dragon Sandbox";
 
         }
 
