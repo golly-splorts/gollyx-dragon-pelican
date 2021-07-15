@@ -795,8 +795,8 @@
     // see getRuleStates function for ruleString to state transform
     rules: {
       // Pick out a rule name from the ruleNames map above
-      ruleString: randomRuleString,
-      ruleName: randomRuleName,
+      ruleString: "",
+      ruleName: "",
 
       // states is populated in getRuleStates()
       // called by loadState()
@@ -901,13 +901,6 @@
       team1name: null,
       team2color: null,
       tam2name: null,
-
-      /*
-      z1lab: null,
-      z2lab: null,
-      z3lab: null,
-      z4lab: null,
-      */
 
       mapName: null,
       mapScoreboardPanel: null,
@@ -1094,8 +1087,20 @@
      */
     loadState : function() {
 
-      // Set the states based on the rules string
-      this.rules.states = this.getRuleStates(this.rules.ruleString);
+      // Set the rule string, then the rule name
+      var ruleString = this.getRuleStringFromUrlSafely();
+      if (ruleString==="") {
+        ruleString = randomRuleString;
+        ruleName = randomRuleName;
+      } else {
+        ruleName = "User Rule";
+      }
+      this.rules.ruleString = ruleString;
+      this.rules.ruleName = ruleName;
+
+      // Use the rule string to get states (outcomes)
+      var ruleStates = this.getRuleStates(ruleString);
+      this.rules.states = ruleStates;
 
       if (this.gameId != null) {
 
@@ -1476,6 +1481,50 @@
       // If we can't figure out how to draw
       // the team icon, just leave it be.
 
+    },
+
+    /*
+     * Parse the user-provided URL parameter "rule"
+     * and check whether it is a valid ternary-state
+     * rule. Return it if so, otherwise return empty string.
+     * Used by getRuleString().
+     */
+    getRuleStringFromUrlSafely : function() {
+      var userRuleString = String(this.helpers.getUrlParameter('rule'));
+
+      if (userRuleString != null) {
+
+        // Validate the rule string:
+
+        // Must be the correct length
+        var correctLength = userRuleString.length===27;
+
+        // Must consist only of 0, 1, 2
+        var correctStates = true;
+        var i;
+        for (i=0; i<userRuleString.length; i++) {
+          if (!( userRuleString[i]=="0" || userRuleString[i]=="1" || userRuleString[i]=="2")) {
+            correctStates = false;
+            break;
+          }
+        }
+        if (correctLength && correctStates) {
+          return userRuleString;
+        } else {
+          // User provided an invalid rule string
+          var message = "";
+          message = userRuleString + ' is not a valid Dragon Cup rule!\n';
+          if (!correctLength) {
+            message += 'Rule strings must be length 27, yours is length ' + userRuleString.length;
+          } else if (!correctStates) {
+            message += 'Rule strings must consist of the characters {0,1,2} only';
+          }
+          alert(message);
+        }
+
+      }
+
+      return "";
     },
 
     getRowsFromUrlSafely : function() {
