@@ -1490,9 +1490,10 @@
      * Used by getRuleString().
      */
     getRuleStringFromUrlSafely : function() {
-      var userRuleString = String(this.helpers.getUrlParameter('rule'));
+      var userRule = this.helpers.getUrlParameter('rule');
+      var userRuleString = String(userRule);
 
-      if (userRuleString != null) {
+      if (userRule != null) {
 
         // Validate the rule string:
 
