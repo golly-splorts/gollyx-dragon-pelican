@@ -47,7 +47,7 @@
     },
 
     /**
-     * Show the site loading message while waiting for the API response
+     * Show/hide the site loading message while waiting for the API response
      */
     loading : function(show = true) {
       var loadingMessages = document.getElementsByClassName("loading-message");
@@ -131,7 +131,7 @@
 
       })
       .catch(err => {
-        console.log("Encountered error when calling /mode API endpoint");
+        console.log("Encountered error while calling /mode API endpoint");
         console.log(err);
         this.error(-1);
       });
@@ -557,6 +557,17 @@
           for (mt = 0; mt < mapTags.length; mt++) {
             mapNameElem = mapTags[mt];
             mapNameElem.innerHTML = mapName;
+          }
+        }
+
+        // Update rule name
+        if (minigame.hasOwnProperty('ruleName')) {
+          var ruleName = minigame.ruleName;
+          var ruleTags = elem.getElementsByClassName('rule-name');
+          var rt;
+          for (rt = 0; rt < ruleTags.length; rt++) {
+            ruleNameElem = ruleTags[rt];
+            ruleNameElem.innerHTML = ruleName;
           }
         }
 
