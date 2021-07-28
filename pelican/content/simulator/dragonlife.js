@@ -1962,13 +1962,23 @@
        * and change change cell alive/dead state at
        * the current mouse location.
        * (sandbox mode only)
+       *
+       * Dragon Cup changes:
+       * In map or sandbox mode:
+       * - if a user clicks on a cell BELOW the (current) last row,
+       *   the click is applied to the last row.
+       * - if a user clicks on a cell ABOVE the (current) last row,
+       *   the click does nothing.
+       *
        */
       canvasMouseDown : function(event) {
         if (GOL.sandboxMode === true || GOL.mapMode === true) {
           var position = GOL.helpers.mousePosition(event);
-          GOL.canvas.switchCell(position[0], position[1]);
           GOL.handlers.lastX = position[0];
           GOL.handlers.lastY = position[1];
+          if (position[1] >= GOL.generation ) {
+            GOL.canvas.switchCell(position[0], GOL.generation);
+          }
           GOL.handlers.mouseDown = true;
         }
       },
@@ -1990,13 +2000,23 @@
        * track where the mouse is going and change
        * cell alive/dead state at mouse location.
        * (sandbox mode only)
+       *
+       * Dragon Cup changes:
+       * - if a user has clicked down and moves the mouse,
+       *   check whether mouse has moved in x direction,
+       *   if not we don't have anything to do,
+       *   otherwise check if mouse is moving above/below current generation row
+       *   if BELOW current gen row, turn cells on/off
+       *   if ABOVE current gen row, do nothing
        */
       canvasMouseMove : function(event) {
         if (GOL.sandboxMode === true || GOL.mapMode === true) {
           if (GOL.handlers.mouseDown) {
             var position = GOL.helpers.mousePosition(event);
             if ((position[0] !== GOL.handlers.lastX) || (position[1] !== GOL.handlers.lastY)) {
-              GOL.canvas.switchCell(position[0], position[1]);
+              if (position[1] >= GOL.generation ) {
+                GOL.canvas.switchCell(position[0], GOL.generation);
+              }
               GOL.handlers.lastX = position[0];
               GOL.handlers.lastY = position[1];
             }
