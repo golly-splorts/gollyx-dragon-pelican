@@ -773,6 +773,7 @@
 
   var ruleNamesArr = Object.keys(ruleNames);
   var randomIndex = Math.floor(Math.random()*ruleNamesArr.length);
+
   var randomRuleName = ruleNamesArr[randomIndex];
   var randomRuleString = ruleNames[randomRuleName];
 
@@ -1159,6 +1160,10 @@
 
           this.rules.ruleName = this.gameApiResult.ruleName;
           this.rules.ruleString = this.gameApiResult.rule;
+
+          // Use the rule string to get states (outcomes)
+          var ruleStates = this.getRuleStates(this.rules.ruleString);
+          this.rules.states = ruleStates;
 
           this.setZoomState();
           this.setInitialState();
