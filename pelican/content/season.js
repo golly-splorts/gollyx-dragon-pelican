@@ -446,16 +446,6 @@
             }
           }
 
-          // Update number of generations
-          if (game.hasOwnProperty('generations')) {
-            var genTags = elem.getElementsByClassName('generations-number');
-            var gt;
-            for (gt = 0; gt < genTags.length; gt++) {
-              genNumberElem = genTags[gt];
-              genNumberElem.innerHTML = game.generations;
-            }
-          }
-
           // Update map pattern name
           if (game.hasOwnProperty('mapName')) {
             var mapName = game.mapName;
@@ -464,6 +454,17 @@
             for (mt = 0; mt < mapTags.length; mt++) {
               mapNameElem = mapTags[mt];
               mapNameElem.innerHTML = mapName;
+            }
+          }
+
+          // Update rule name
+          if (game.hasOwnProperty('ruleName')) {
+            var ruleName = game.ruleName;
+            var ruleTags = elem.getElementsByClassName('rule-name');
+            var mt;
+            for (mt = 0; mt < ruleTags.length; mt++) {
+              ruleNameElem = ruleTags[mt];
+              ruleNameElem.innerHTML = ruleName;
             }
           }
 
