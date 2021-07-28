@@ -564,6 +564,17 @@
               }
             }
 
+            // Update rule name
+            if (game.hasOwnProperty('ruleName')) {
+              var ruleName = game.ruleName;
+              var ruleTags = elem.getElementsByClassName('rule-name');
+              var rt;
+              for (rt = 0; rt < ruleTags.length; rt++) {
+                ruleNameElem = ruleTags[rt];
+                ruleNameElem.innerHTML = ruleName;
+              }
+            }
+
             // Update simulate game button link
             if (game.hasOwnProperty('gameid')) {
               var btnUrl = this.baseUIUrl + '/simulator/index.html?gameId=' + game.gameid;
