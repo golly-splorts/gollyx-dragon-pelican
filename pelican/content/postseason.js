@@ -14,7 +14,7 @@
       'season-header-container',
       'postseason-toc-container',
       'postseason-champion-container',
-      'postseason-hcs-container',
+      'postseason-dcs-container',
       'postseason-lcs-container',
       'postseason-lds-container'
     ],
@@ -196,8 +196,8 @@
               this.fillLdsSeriesContainer(postseasonApiResult[series]);
             } else if (lower=='lcs') {
               this.fillLcsSeriesContainer(postseasonApiResult[series]);
-            } else if (lower=='hcs') {
-              this.fillHcsSeriesContainer(postseasonApiResult[series]);
+            } else if (lower=='dcs') {
+              this.fillDcsSeriesContainer(postseasonApiResult[series]);
             }
           }
         } // end for each series
@@ -330,19 +330,19 @@
     },
 
     /**
-     * Fill the HCS game container (only one)
+     * Fill the DCS game container (only one)
      */
-    fillHcsSeriesContainer : function(miniseason) {
-      var container = document.getElementById('postseason-hcs-container');
-      var leagueContainer = document.getElementById('hcs-league-container');
-      this.populateHcsGames(miniseason, leagueContainer);
+    fillDcsSeriesContainer : function(miniseason) {
+      var container = document.getElementById('postseason-dcs-container');
+      var leagueContainer = document.getElementById('dcs-league-container');
+      this.populateDcsGames(miniseason, leagueContainer);
       container.classList.remove('invisible');
     },
 
     /**
-     * Populate a HCS series container with games.
+     * Populate a DCS series container with games.
      */
-    populateHcsGames : function(miniseason, seriesContainerElem) {
+    populateDcsGames : function(miniseason, seriesContainerElem) {
       var iDay;
       for (iDay = 0; iDay < miniseason.length; iDay++) {
         var miniday = miniseason[iDay];
