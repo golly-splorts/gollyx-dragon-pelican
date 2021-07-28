@@ -894,9 +894,7 @@
       livecells : null,
       livecells1 : null,
       livecells2 : null,
-      // victory: null,
-      // territory1: null,
-      // territory2: null,
+      victory: null,
       team1color: null,
       team1name: null,
       team2color: null,
@@ -904,6 +902,10 @@
 
       mapName: null,
       mapScoreboardPanel: null,
+
+      ruleNameEl: null,
+      ruleEl: null,
+      ruleScoreboardPanel: null,
     },
 
     // Initial state
@@ -1154,14 +1156,14 @@
           this.rows = this.gameApiResult.rows;
           this.cellSize = this.gameApiResult.cellSize;
           this.mapName = this.gameApiResult.mapName;
-          this.mapZone1Name = this.gameApiResult.mapZone1Name;
-          this.mapZone2Name = this.gameApiResult.mapZone2Name;
-          this.mapZone3Name = this.gameApiResult.mapZone3Name;
-          this.mapZone4Name = this.gameApiResult.mapZone4Name;
+
+          this.rules.ruleName = this.gameApiResult.ruleName;
+          this.rules.ruleString = this.gameApiResult.rule;
 
           this.setZoomState();
           this.setInitialState();
 
+          this.updateRuleLabels();
           this.updateMapLabels();
           this.updateTeamNamesColors();
           this.updateTeamRecords();
@@ -1184,6 +1186,18 @@
         // Get user-specified rows/cols, if any
         var rows = this.getRowsFromUrlSafely();
         var cols = this.getColsFromUrlSafely();
+
+        // // get rulestring
+        // var ruleString = this.getRuleStringFromUrlSafely();
+        // if (ruleString==="") {
+        //   // user did not specify a rulestring
+        //   ruleString = randomRuleString;
+        //   ruleName = randomRuleName;
+        // } else {
+        //   ruleName = "User Rule";
+        // }
+        // this.rules.ruleString = ruleString;
+        // this.rules.ruleName = ruleName;
 
         // Load a map from the /map API endpoint
         let url = this.mapsApiUrl + '/map/dragon/' + this.patternName + '/r/' + this.getRowsFromUrlSafely() + '/c/' + this.getColsFromUrlSafely();
@@ -1219,6 +1233,7 @@
           this.setZoomState();
           this.setInitialState();
 
+          this.updateRuleLabels();
           this.updateMapLabels();
           this.updateTeamNamesColors();
           this.updateTeamRecords();
@@ -1236,6 +1251,18 @@
       } else {
 
         // ~~~~~~~~~~ PLAIN OL SANDBOX MODE ~~~~~~~~~~
+
+        // // get rulestring
+        // var ruleString = this.getRuleStringFromUrlSafely();
+        // if (ruleString==="") {
+        //   // user did not specify a rulestring
+        //   ruleString = randomRuleString;
+        //   ruleName = randomRuleName;
+        // } else {
+        //   ruleName = "User Rule";
+        // }
+        // this.rules.ruleString = ruleString;
+        // this.rules.ruleName = ruleName;
 
         this.setTeamNames();
         this.setColors();
@@ -1274,6 +1301,7 @@
 
         this.setInitialState();
 
+        this.updateRuleLabels();
         this.updateMapLabels();
         this.updateTeamNamesColors();
         this.updateTeamRecords();
@@ -1337,26 +1365,22 @@
     },
 
     /**
+     * Update rule labels using loaded rule data
+     */
+    updateRuleLabels : function() {
+      this.element.ruleNameEl.innerHTML = this.rules.ruleName;
+      this.element.ruleEl.innerHTML = this.rules.ruleString;
+    },
+
+    /**
      * Update map labels using loaded map label data
      */
     updateMapLabels : function() {
       if (this.grid.mapOverlay===true) {
         this.element.mapName.innerHTML = this.mapName;
-        /*
-        this.element.z1lab.innerHTML = this.mapZone1Name;
-        this.element.z2lab.innerHTML = this.mapZone2Name;
-        this.element.z3lab.innerHTML = this.mapZone3Name;
-        this.element.z4lab.innerHTML = this.mapZone4Name;
-        */
       } else {
         // Remove the Map line from the scoreboard
         this.element.mapScoreboardPanel.remove();
-        /*
-        this.element.z1lab.remove();
-        this.element.z2lab.remove();
-        this.element.z3lab.remove();
-        this.element.z4lab.remove();
-        */
       }
 
     },
@@ -1780,14 +1804,11 @@
       this.element.mapName = document.getElementById('mapname-label');
       this.element.mapScoreboardPanel = document.getElementById('scoreboard-panel-map');
 
-      this.element.speedSlider = document.getElementById('speed-slider');
+      this.element.ruleNameEl = document.getElementById('rule-name-label');
+      this.element.ruleEl = document.getElementById('rule-label');
+      this.element.ruleScoreboardPanel = document.getElementById('scoreboard-panel-rule');
 
-      /*
-      this.element.z1lab = document.getElementById('zone1label');
-      this.element.z2lab = document.getElementById('zone2label');
-      this.element.z3lab = document.getElementById('zone3label');
-      this.element.z4lab = document.getElementById('zone4label');
-      */
+      this.element.speedSlider = document.getElementById('speed-slider');
 
       this.element.team1winner = document.getElementById('team1winner');
       this.element.team2winner = document.getElementById('team2winner');
@@ -2610,155 +2631,6 @@
         } else {
           this.redrawList.push([GOL.columns - 1, y, 0]);
         }
-        
-        // // // var x, xm1, xp1, y, ym1, yp1;
-        // // // var i, j, m, n, key, t1, t2;
-        // // // var alive = 0, alive1 = 0, alive2 = 0;
-        // // // var deadNeighbors;
-        // // // var newState = [], newState1 = [], newState2 = [];
-        // // // var allDeadNeighbors = {};
-        // // // var allDeadNeighbors1 = {};
-        // // // var allDeadNeighbors2 = {};
-        // // // var neighbors, color;
-        // // // this.redrawList = [];
-
-        // // // // iterate over each point stored in the actualState list
-        // // // for (i = 0; i < this.actualState.length; i++) {
-        // // //   this.topPointer = 1;
-        // // //   this.bottomPointer = 1;
-
-        // // //   for (j = 1; j < this.actualState[i].length; j++) {
-        // // //     x = this.actualState[i][j];
-        // // //     y = this.actualState[i][0];
-
-        // // //     xm1 = (x-1);
-        // // //     ym1 = (y-1);
-
-        // // //     xp1 = (x+1);
-        // // //     yp1 = (y+1);
-
-        // // //     // Possible dead neighbors
-        // // //     deadNeighbors = [[xm1, ym1, 1], [x, ym1, 1], [xp1, ym1, 1], [xm1, y, 1], [xp1, y, 1], [xm1, yp1, 1], [x, yp1, 1], [xp1, yp1, 1]];
-
-        // // //     // Get number of live neighbors and remove alive neighbors from deadNeighbors
-        // // //     result = this.getNeighborsFromAlive(x, y, i, this.actualState, deadNeighbors);
-        // // //     neighbors = result['neighbors'];
-        // // //     color = result['color'];
-
-        // // //     // Join dead neighbors to check list
-        // // //     for (m = 0; m < 8; m++) {
-        // // //       if (deadNeighbors[m] !== undefined) {
-        // // //         // this cell is dead
-        // // //         var xx = deadNeighbors[m][0];
-        // // //         var yy = deadNeighbors[m][1];
-        // // //         key = xx + ',' + yy; // Create hashtable key
-
-        // // //         // count number of dead neighbors
-        // // //         if (allDeadNeighbors[key] === undefined) {
-        // // //           allDeadNeighbors[key] = 1;
-        // // //         } else {
-        // // //           allDeadNeighbors[key]++;
-        // // //         }
-        // // //       }
-        // // //     }
-
-        // // //     // survive counts
-        // // //     //
-        // // //     // // 34 life (too slow)
-        // // //     // if ((neighbors == 3) || (neighbors == 4)) {} 
-        // // //     // // coagulations (blows up)
-        // // //     // if (!(neighbors === 1)) {} 
-        // // //     // // gnarl (way too slow/chaotic)
-        // // //     // if (neighbors === 1) {} 
-        // // //     // // long life (boring)
-        // // //     // if (neighbors===5) {} 
-        // // //     // // stains (too slow)
-        // // //     // if (!((neighbors===1)||(neighbors===4))) {} 
-        // // //     // // walled cities
-        // // //     // if ((neighbors > 1) && (neighbors < 6)) {} 
-        // // //     //
-        // // //     // // conway's life
-        // // //     // if (!(neighbors === 0 || neighbors === 1 || neighbors > 3)) {} 
-        // // //     // // amoeba life (good)
-        // // //     // if ((neighbors === 1) || (neighbors === 3) || (neighbors === 5) || (neighbors === 8)) {} 
-        // // //     // // high life (good, but some oscillators blow up)
-        // // //     // if ((neighbors===2)||(neighbors===3)) {} 
-        // // //     // // 2x2 (good, but victory conditions *may* need to change)
-        // // //     // if ((neighbors===1)||(neighbors===2)||(neighbors===5)){} 
-        // // //     // // // pseudo life (good)
-        // // //     // if ((neighbors===2)||(neighbors===3)||(neighbors===8)) {} 
-
-        // // //     // conway's life
-        // // //     if ((neighbors===2)||(neighbors===3)) {
-
-        // // //       this.addCell(x, y, newState);
-        // // //       if (color==1) {
-        // // //         this.addCell(x, y, newState1);
-        // // //       } else if (color==2) {
-        // // //         this.addCell(x, y, newState2);
-        // // //       }
-        // // //       this.redrawList.push([x, y, 2]); // Keep alive
-        // // //     } else {
-        // // //       this.redrawList.push([x, y, 0]); // Kill cell
-        // // //     }
-        // // //   }
-        // // // }
-
-        // // // // Process dead neighbors
-        // // // for (key in allDeadNeighbors) {
-
-        // // //   // birth counts
-        // // //   //
-        // // //   // // 34 life (too slow)
-        // // //   // if ((allDeadNeighbors[key] === 3) || (allDeadNeighbors[key] === 4)) {} 
-        // // //   // coagulations
-        // // //   // if ((allDeadNeighbors[key] === 3) || (allDeadNeighbors[key] === 7) || (allDeadNeighbors[key] === 8)) {} 
-        // // //   // // gnarl (way too slow/chaotic)
-        // // //   // if (allDeadNeighbors[key] === 1) {} 
-        // // //   // // long life (boring)
-        // // //   // if ((allDeadNeighbors[key] === 3) || (allDeadNeighbors[key] === 4) || (allDeadNeighbors[key] === 5)) {} 
-        // // //   // // stains (too slow)
-        // // //   // if ((allDeadNeighbors[key]===3)||(allDeadNeighbors[key]>5)) {} 
-        // // //   // // walled cities (boring)
-        // // //   // if (allDeadNeighbors[key] > 3) {} 
-        // // //   //
-        // // //   // // conway's life
-        // // //   // if (allDeadNeighbors[key] === 3) {} 
-        // // //   // // amoeba life (good)
-        // // //   // if ((allDeadNeighbors[key] === 3) || (allDeadNeighbors[key] === 5) || (allDeadNeighbors[key] === 7)) {}
-        // // //   // // high life (good, but some oscillators blow up)
-        // // //   // if ((allDeadNeighbors[key] === 3) || (allDeadNeighbors[key] === 6)) {} 
-        // // //   // // 2x2 (good, but victory conditions *may* need to change)
-        // // //   // if ((allDeadNeighbors[key]===3) || (allDeadNeighbors[key]===6)) {} 
-        // // //   // // // pseudo life (good)
-        // // //   // if ((allDeadNeighbors[key]==3)||(allDeadNeighbors[key]==5)||(allDeadNeighbors[key]==7)) {} 
-
-        // // //   // conway's life
-        // // //   if (allDeadNeighbors[key] === 3) {
-
-        // // //     // This cell is dead, but has enough neighbors
-        // // //     // that are alive that it will make new life.
-        // // //     key = key.split(',');
-        // // //     t1 = parseInt(key[0], 10);
-        // // //     t2 = parseInt(key[1], 10);
-
-        // // //     // Get color from neighboring parent cells
-        // // //     color = this.getColorFromAlive(t1, t2);
-
-        // // //     this.addCell(t1, t2, newState);
-        // // //     if (color == 1) {
-        // // //       this.addCell(t1, t2, newState1);
-        // // //     } else if (color == 2) {
-        // // //       this.addCell(t1, t2, newState2);
-        // // //     }
-
-        // // //     this.redrawList.push([t1, t2, 1]);
-        // // //   }
-        // // // }
-
-        // // // this.actualState = newState;
-        // // // this.actualState1 = newState1;
-        // // // this.actualState2 = newState2;
 
         return this.getLiveCounts();
       },
