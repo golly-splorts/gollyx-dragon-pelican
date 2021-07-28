@@ -565,6 +565,7 @@
             }
 
             // Update rule name
+            console.log(game);
             if (game.hasOwnProperty('ruleName')) {
               var ruleName = game.ruleName;
               var ruleTags = elem.getElementsByClassName('rule-name');
@@ -794,6 +795,17 @@
                     }
                   }
 
+                  // Update rule name
+                  if (game.hasOwnProperty('ruleName')) {
+                    var ruleName = game.ruleName;
+                    var ruleTags = elem.getElementsByClassName('rule-name');
+                    var rt;
+                    for (rt = 0; rt < ruleTags.length; rt++) {
+                      ruleNameElem = ruleTags[rt];
+                      ruleNameElem.innerHTML = ruleName;
+                    }
+                  }
+
                   // Team colors
                   if (game.hasOwnProperty('team1Color') && game.hasOwnProperty('team2Color')) {
                     t1tags = elem.getElementsByClassName('team1color');
@@ -901,6 +913,17 @@
                 var mapTags = elem.getElementsByClassName('map-name');
                 for (let mt in mapTags) {
                   mapTags[mt].innerHTML = mapName;
+                }
+              }
+
+              // Update rule name
+              if (game.hasOwnProperty('ruleName')) {
+                var ruleName = game.ruleName;
+                var ruleTags = elem.getElementsByClassName('rule-name');
+                var rt;
+                for (rt = 0; rt < ruleTags.length; rt++) {
+                  ruleNameElem = ruleTags[rt];
+                  ruleNameElem.innerHTML = ruleName;
                 }
               }
 
@@ -1061,13 +1084,24 @@
                     }
                   }
 
-                  // Update map name
+                  // Update map pattern name
                   if (game.hasOwnProperty('mapName')) {
                     var mapName = game.mapName;
                     var mapTags = elem.getElementsByClassName('map-name');
                     var mt;
                     for (mt = 0; mt < mapTags.length; mt++) {
                       mapTags[mt].innerHTML = mapName;
+                    }
+                  }
+
+                  // Update rule name
+                  if (game.hasOwnProperty('ruleName')) {
+                    var ruleName = game.ruleName;
+                    var ruleTags = elem.getElementsByClassName('rule-name');
+                    var rt;
+                    for (rt = 0; rt < ruleTags.length; rt++) {
+                      ruleNameElem = ruleTags[rt];
+                      ruleNameElem.innerHTML = ruleName;
                     }
                   }
 
@@ -1189,6 +1223,17 @@
               for (mt = 0; mt < mapTags.length; mt++) {
                 mapNameElem = mapTags[mt];
                 mapNameElem.innerHTML = mapName;
+              }
+            }
+
+            // Update rule name
+            if (game.hasOwnProperty('ruleName')) {
+              var ruleName = game.ruleName;
+              var ruleTags = elem.getElementsByClassName('rule-name');
+              var rt;
+              for (rt = 0; rt < ruleTags.length; rt++) {
+                ruleNameElem = ruleTags[rt];
+                ruleNameElem.innerHTML = ruleName;
               }
             }
 
