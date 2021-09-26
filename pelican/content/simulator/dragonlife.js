@@ -823,14 +823,12 @@
 
     // Cell colors
     //
-    // dead/trail colors always the same
     // alive color sets are either set by the game (game mode)
     // or set by the user via the schemes (sandbox mode)
     colors : {
       current : 0,
       schedule : false,
       dead: realBackgroundColor,
-      trail: grays,
       alive: null,
 
       schemes : [
@@ -913,12 +911,6 @@
     // Set in loadConfig()
     initialState1 : null,
     initialState2 : null,
-
-    // Trail state
-    trail : {
-      current: false,
-      schedule : false
-    },
 
     /**
      * On Load Event
@@ -1072,9 +1064,6 @@
 
       // Add ?autoplay=1 to the end of the URL to enable autoplay
       this.autoplay = this.helpers.getUrlParameter('autoplay') === '1' ? true : this.autoplay;
-
-      // Add ?trail=1 to the end of the URL to show trails
-      this.trail.current = this.helpers.getUrlParameter('trail') === '1' ? true : this.trail.current;
 
       // // Get the current wait time (this is updated when the user changes it)
       // var x = document.getElementById("speed-slider").value;
@@ -1863,7 +1852,6 @@
       this.helpers.registerEvent(document.getElementById('speed-slider'), 'input', this.handlers.buttons.speedControl, false);
 
       // Layout
-      this.helpers.registerEvent(document.getElementById('buttonTrail'), 'click', this.handlers.buttons.trail, false);
       this.helpers.registerEvent(document.getElementById('buttonGrid'), 'click', this.handlers.buttons.grid, false);
       this.helpers.registerEvent(document.getElementById('buttonColors'), 'click', this.handlers.buttons.colorcycle, false);
     },
@@ -1906,12 +1894,6 @@
       guiTime = (new Date()) - guiTime;
 
       // Post-run updates
-
-      // Clear Trail
-      if (GOL.trail.schedule) {
-        GOL.trail.schedule = false;
-        GOL.canvas.drawWorld();
-      }
 
       // Change Grid
       if (GOL.grid.schedule) {
@@ -2164,18 +2146,6 @@
 
 
         /**
-         * Button Handler - Remove/Add Trail
-         */
-        trail : function() {
-          GOL.trail.current = !GOL.trail.current;
-          if (GOL.running) {
-            GOL.trail.schedule = true;
-          } else {
-            GOL.canvas.drawWorld();
-          }
-        },
-
-        /**
          * Cycle through the color schemes
          */
         colorcycle : function() {
@@ -2337,11 +2307,7 @@
           this.context.fillStyle = GOL.colors.alive[GOL.listLife.getCellColor(i, j) - 1];
 
         } else {
-          if (GOL.trail.current && this.age[i][j] < 0) {
-            this.context.fillStyle = GOL.colors.trail[(this.age[i][j] * -1) % GOL.colors.trail.length];
-          } else {
-            this.context.fillStyle = GOL.colors.dead;
-          }
+          this.context.fillStyle = GOL.colors.dead;
         }
 
         this.context.fillRect(this.cellSpace + (this.cellSpace * i) + (this.cellSize * i), this.cellSpace + (this.cellSpace * j) + (this.cellSize * j), this.cellSize, this.cellSize);
@@ -2427,7 +2393,6 @@
        */
       changeCelltoDead : function(i, j) {
         if (i >= 0 && i < GOL.columns && j >=0 && j < GOL.rows) {
-          this.age[i][j] = -this.age[i][j]; // Keep trail
           this.drawCell(i, j, false);
         }
       }
