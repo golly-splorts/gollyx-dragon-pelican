@@ -32,13 +32,13 @@
                       <th class="scoreboard-table-column-score" align="right">Score</th>
                       <th class="scoreboard-table-column-spacing"></th>
                       <th class="scoreboard-table-column-record" align="right">Record</th>
-                      <th class="scoreboard-table-column-rainbows" align="right"></th>
                     </thead>
                     <!-- team1 -->
                     <tr class="scoreboard-table-first-row">
                       <td class="scoreboard-table-column-rank">
-                          <!-- width is 0px, set to 35px in JS when rank is shown -->
-                        <span class="badge badge-success" id="team1rank"></span>
+                        <!-- width is 0px, set to 35px in JS when rank is shown -->
+                        <span class="badge badge-success" id="team1winner"></span>
+                        <span class="badge badge-danger" id="team1loser"></span>
                       </td>
                       <td class="scoreboard-table-column-icon">
                         <!-- width is 35px -->
@@ -60,18 +60,15 @@
                         <!-- width is 45px -->
                         <span class="team1color simulator-record" id="team1record"></span>
                       </td>
-                      <td align="right" class="scoreboard-table-column-rainbows">
-                        <!-- width is 45px -->
-                        <span class="team1color simulator-rainbows" id="team1rainbows"></span>
-                      </td>
                     </tr>
 
 
                     <!-- team2 -->
                     <tr class="scoreboard-table-nth-row">
                       <td class="scoreboard-table-column-rank">
-                          <!-- width is 0px, set to 35px in JS when rank is shown -->
-                        <span class="badge badge-success" id="team2rank"></span>
+                        <!-- width is 0px, set to 35px in JS when rank is shown -->
+                        <span class="badge badge-success" id="team2winner"></span>
+                        <span class="badge badge-danger" id="team2loser"></span>
                       </td>
                       <td class="scoreboard-table-column-icon">
                         <!-- width is 35px -->
@@ -93,13 +90,15 @@
                         <!-- width is 45px -->
                         <span class="team2color simulator-record" id="team2record"></span>
                       </td>
-                      <td align="right" class="scoreboard-table-column-rainbows">
-                        <!-- width is 45px -->
-                        <span class="team2color simulator-rainbows" id="team2rainbows"></span>
-                      </td>
                     </tr>
 
                   </table>
+                </li>
+                <li class="list-group-item scoreboard-panel"> 
+                  <span id="rule-name-label"></span><br />
+                  <small>
+                      <span id="rule-label"></span>
+                  </small>
                 </li>
               </ul>
           </div>
@@ -113,9 +112,9 @@
 
                   <li class="list-group-item stats-panel" id="stats-panel-livepct"> 
                       <table width="100%"><tr><td>
-                        Live %:
+                        Victory %:
                       </td><td align="right">
-                        <span id="livePct"></span>
+                        <span id="victoryPct"></span>
                       </td></tr></table>
                   </li>
   
