@@ -26,7 +26,7 @@
                 <li class="list-group-item scoreboard-panel scoreboard-panel-no-padding"> 
                   <table class="scoreboard-panel-table" id="scoreboard-panel-table-the">
                     <thead>
-                      <th class="scoreboard-table-column-rank"></th>
+                      <th class="scoreboard-table-column-wl"></th>
                       <th class="scoreboard-table-column-icon"></th>
                       <th class="scoreboard-table-column-name"></th>
                       <th class="scoreboard-table-column-score" align="right">Score</th>
@@ -35,7 +35,7 @@
                     </thead>
                     <!-- team1 -->
                     <tr class="scoreboard-table-first-row">
-                      <td class="scoreboard-table-column-rank">
+                      <td class="scoreboard-table-column-wl">
                         <!-- width is 0px, set to 35px in JS when rank is shown -->
                         <span class="badge badge-success" id="team1winner"></span>
                         <span class="badge badge-danger" id="team1loser"></span>
@@ -65,7 +65,7 @@
 
                     <!-- team2 -->
                     <tr class="scoreboard-table-nth-row">
-                      <td class="scoreboard-table-column-rank">
+                      <td class="scoreboard-table-column-wl">
                         <!-- width is 0px, set to 35px in JS when rank is shown -->
                         <span class="badge badge-success" id="team2winner"></span>
                         <span class="badge badge-danger" id="team2loser"></span>
@@ -94,7 +94,7 @@
 
                   </table>
                 </li>
-                <li class="list-group-item scoreboard-panel"> 
+                <li class="list-group-item scoreboard-panel scoreboard-panel-rule"> 
                   <span id="rule-name-label"></span><br />
                   <small>
                       <span id="rule-label"></span>
@@ -203,7 +203,7 @@
 
   <div class="row">
     <div class="col-sm-12">
-      <table border="0">
+      <table border="0" class="grid-holder">
         <tr>
           <td colspan="2">
             <canvas id="canvas" width="900" height="450">

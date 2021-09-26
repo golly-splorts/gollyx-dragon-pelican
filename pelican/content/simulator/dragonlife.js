@@ -902,11 +902,11 @@
       tam2name: null,
 
       mapName: null,
-      mapScoreboardPanel: null,
+      mapPanel: null,
 
       ruleNameEl: null,
       ruleEl: null,
-      ruleScoreboardPanel: null,
+      rulePanel: null,
     },
 
     // Initial state
@@ -1385,7 +1385,7 @@
         this.element.mapName.innerHTML = this.mapName;
       } else {
         // Remove the Map line from the scoreboard
-        this.element.mapScoreboardPanel.remove();
+        this.element.mapPanel.remove();
       }
 
     },
@@ -1748,8 +1748,29 @@
           this.element.team2wlrec.innerHTML = wlstr2;
         }
       } else {
-        this.element.team1wlrecCont.remove();
-        this.element.team2wlrecCont.remove();
+
+        // TODO When not in game mode, do the following:
+        // - remove table columns for records and rainbows
+        // - shrink icons column to 0px
+        // - shrink scoreboard container to sm-4
+        var elems;
+        var i, j, k;
+
+        // Delete unused columns from scoreboard table
+        var idsToDelete = ['scoreboard-table-column-icon', 'scoreboard-table-column-spacing', 'scoreboard-table-column-record'];
+        for(i = 0; i < idsToDelete.length; i++) {
+          idToDelete = idsToDelete[i];
+          elems = document.getElementsByClassName(idToDelete);
+          while(elems[0]) {
+            elems[0].parentNode.removeChild(elems[0]);
+          }
+        }
+
+        // Shrink scoreboard container to sm-4
+        var elem = document.getElementById('scoreboard-panels-container');
+        elem.classList.remove('col-sm-8');
+        elem.classList.add('col-sm-4');
+
       }
     },
 
@@ -1807,11 +1828,11 @@
       this.element.colorButton = document.getElementById('buttonColors');
 
       this.element.mapName = document.getElementById('mapname-label');
-      this.element.mapScoreboardPanel = document.getElementById('scoreboard-panel-map');
+      this.element.mapPanel = document.getElementById('stats-panel-map');
 
       this.element.ruleNameEl = document.getElementById('rule-name-label');
       this.element.ruleEl = document.getElementById('rule-label');
-      this.element.ruleScoreboardPanel = document.getElementById('scoreboard-panel-rule');
+      this.element.rulePanel = document.getElementById('scoreboard-panel-rule');
 
       this.element.speedSlider = document.getElementById('speed-slider');
 
