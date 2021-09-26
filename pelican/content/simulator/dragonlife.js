@@ -2051,6 +2051,14 @@
             GOL.handlers.buttons.step();
           }
 
+        } else if (event.keyCode === 70 ) { // Key: F
+          var speed = GOL.element.speedSlider.value;
+          speed = speed - 1;
+          if (speed===0) {
+            speed = 4;
+          }
+          GOL.element.speedSlider.value = speed;
+
         } else if (event.keyCode === 71 ) { // Key: G
           GOL.handlers.buttons.grid();
 
@@ -2073,11 +2081,11 @@
           // Update run/stop button state
           if (GOL.running) {
             GOL.nextStep();
-            document.getElementById('buttonRun').textContent = 'Stop';
+            document.getElementById('buttonRun').innerHTML = '<u>S</u>top';
             document.getElementById('buttonRun').classList.remove("btn-success");
             document.getElementById('buttonRun').classList.add("btn-danger");
           } else {
-            document.getElementById('buttonRun').textContent = 'Run';
+            document.getElementById('buttonRun').innerHTML = '<u>R</u>un';
             document.getElementById('buttonRun').classList.remove("btn-danger");
             document.getElementById('buttonRun').classList.add("btn-success");
           }
