@@ -2051,6 +2051,14 @@
             GOL.handlers.buttons.step();
           }
 
+        } else if (event.keyCode === 70 ) { // Key: F
+          var speed = GOL.element.speedSlider.value;
+          speed = speed - 1;
+          if (speed===0) {
+            speed = 4;
+          }
+          GOL.element.speedSlider.value = speed;
+
         } else if (event.keyCode === 71 ) { // Key: G
           GOL.handlers.buttons.grid();
 
