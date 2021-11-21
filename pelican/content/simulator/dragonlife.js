@@ -823,14 +823,12 @@
 
     // Cell colors
     //
-    // dead/trail colors always the same
     // alive color sets are either set by the game (game mode)
     // or set by the user via the schemes (sandbox mode)
     colors : {
       current : 0,
       schedule : false,
       dead: realBackgroundColor,
-      trail: grays,
       alive: null,
 
       schemes : [
@@ -902,23 +900,17 @@
       tam2name: null,
 
       mapName: null,
-      mapScoreboardPanel: null,
+      mapPanel: null,
 
       ruleNameEl: null,
       ruleEl: null,
-      ruleScoreboardPanel: null,
+      rulePanel: null,
     },
 
     // Initial state
     // Set in loadConfig()
     initialState1 : null,
     initialState2 : null,
-
-    // Trail state
-    trail : {
-      current: false,
-      schedule : false
-    },
 
     /**
      * On Load Event
@@ -1072,9 +1064,6 @@
 
       // Add ?autoplay=1 to the end of the URL to enable autoplay
       this.autoplay = this.helpers.getUrlParameter('autoplay') === '1' ? true : this.autoplay;
-
-      // Add ?trail=1 to the end of the URL to show trails
-      this.trail.current = this.helpers.getUrlParameter('trail') === '1' ? true : this.trail.current;
 
       // // Get the current wait time (this is updated when the user changes it)
       // var x = document.getElementById("speed-slider").value;
@@ -1385,7 +1374,7 @@
         this.element.mapName.innerHTML = this.mapName;
       } else {
         // Remove the Map line from the scoreboard
-        this.element.mapScoreboardPanel.remove();
+        this.element.mapPanel.remove();
       }
 
     },
@@ -1748,8 +1737,29 @@
           this.element.team2wlrec.innerHTML = wlstr2;
         }
       } else {
-        this.element.team1wlrecCont.remove();
-        this.element.team2wlrecCont.remove();
+
+        // TODO When not in game mode, do the following:
+        // - remove table columns for records and rainbows
+        // - shrink icons column to 0px
+        // - shrink scoreboard container to sm-4
+        var elems;
+        var i, j, k;
+
+        // Delete unused columns from scoreboard table
+        var idsToDelete = ['scoreboard-table-column-icon', 'scoreboard-table-column-spacing', 'scoreboard-table-column-record'];
+        for(i = 0; i < idsToDelete.length; i++) {
+          idToDelete = idsToDelete[i];
+          elems = document.getElementsByClassName(idToDelete);
+          while(elems[0]) {
+            elems[0].parentNode.removeChild(elems[0]);
+          }
+        }
+
+        // Shrink scoreboard container to sm-4
+        var elem = document.getElementById('scoreboard-panels-container');
+        elem.classList.remove('col-sm-8');
+        elem.classList.add('col-sm-4');
+
       }
     },
 
@@ -1807,11 +1817,11 @@
       this.element.colorButton = document.getElementById('buttonColors');
 
       this.element.mapName = document.getElementById('mapname-label');
-      this.element.mapScoreboardPanel = document.getElementById('scoreboard-panel-map');
+      this.element.mapPanel = document.getElementById('stats-panel-map');
 
       this.element.ruleNameEl = document.getElementById('rule-name-label');
       this.element.ruleEl = document.getElementById('rule-label');
-      this.element.ruleScoreboardPanel = document.getElementById('scoreboard-panel-rule');
+      this.element.rulePanel = document.getElementById('scoreboard-panel-rule');
 
       this.element.speedSlider = document.getElementById('speed-slider');
 
@@ -1842,7 +1852,6 @@
       this.helpers.registerEvent(document.getElementById('speed-slider'), 'input', this.handlers.buttons.speedControl, false);
 
       // Layout
-      this.helpers.registerEvent(document.getElementById('buttonTrail'), 'click', this.handlers.buttons.trail, false);
       this.helpers.registerEvent(document.getElementById('buttonGrid'), 'click', this.handlers.buttons.grid, false);
       this.helpers.registerEvent(document.getElementById('buttonColors'), 'click', this.handlers.buttons.colorcycle, false);
     },
@@ -1885,12 +1894,6 @@
       guiTime = (new Date()) - guiTime;
 
       // Post-run updates
-
-      // Clear Trail
-      if (GOL.trail.schedule) {
-        GOL.trail.schedule = false;
-        GOL.canvas.drawWorld();
-      }
 
       // Change Grid
       if (GOL.grid.schedule) {
@@ -2051,6 +2054,14 @@
             GOL.handlers.buttons.step();
           }
 
+        } else if (event.keyCode === 70 ) { // Key: F
+          var speed = GOL.element.speedSlider.value;
+          speed = speed - 1;
+          if (speed===0) {
+            speed = 4;
+          }
+          GOL.element.speedSlider.value = speed;
+
         } else if (event.keyCode === 71 ) { // Key: G
           GOL.handlers.buttons.grid();
 
@@ -2073,11 +2084,11 @@
           // Update run/stop button state
           if (GOL.running) {
             GOL.nextStep();
-            document.getElementById('buttonRun').textContent = 'Stop';
+            document.getElementById('buttonRun').innerHTML = '<u>S</u>top';
             document.getElementById('buttonRun').classList.remove("btn-success");
             document.getElementById('buttonRun').classList.add("btn-danger");
           } else {
-            document.getElementById('buttonRun').textContent = 'Run';
+            document.getElementById('buttonRun').innerHTML = '<u>R</u>un';
             document.getElementById('buttonRun').classList.remove("btn-danger");
             document.getElementById('buttonRun').classList.add("btn-success");
           }
@@ -2133,18 +2144,6 @@
           }
         },
 
-
-        /**
-         * Button Handler - Remove/Add Trail
-         */
-        trail : function() {
-          GOL.trail.current = !GOL.trail.current;
-          if (GOL.running) {
-            GOL.trail.schedule = true;
-          } else {
-            GOL.canvas.drawWorld();
-          }
-        },
 
         /**
          * Cycle through the color schemes
@@ -2308,11 +2307,7 @@
           this.context.fillStyle = GOL.colors.alive[GOL.listLife.getCellColor(i, j) - 1];
 
         } else {
-          if (GOL.trail.current && this.age[i][j] < 0) {
-            this.context.fillStyle = GOL.colors.trail[(this.age[i][j] * -1) % GOL.colors.trail.length];
-          } else {
-            this.context.fillStyle = GOL.colors.dead;
-          }
+          this.context.fillStyle = GOL.colors.dead;
         }
 
         this.context.fillRect(this.cellSpace + (this.cellSpace * i) + (this.cellSize * i), this.cellSpace + (this.cellSpace * j) + (this.cellSize * j), this.cellSize, this.cellSize);
@@ -2398,7 +2393,6 @@
        */
       changeCelltoDead : function(i, j) {
         if (i >= 0 && i < GOL.columns && j >=0 && j < GOL.rows) {
-          this.age[i][j] = -this.age[i][j]; // Keep trail
           this.drawCell(i, j, false);
         }
       }
