@@ -1,7 +1,7 @@
 import os, re, glob
 
 
-GOLLYX_DRAGON_PELICAN_VERSION = "42.0.7"
+GOLLYX_DRAGON_PELICAN_VERSION = "51.0.0dev0"
 
 
 # Yes, this is supposed to be UI not URI...
