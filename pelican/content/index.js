@@ -1143,7 +1143,7 @@
           // Dragon Cup Series
           // In progress
 
-          // HCS has no league, single-column
+          // DCS has no league, single-column
           var leagueContainerElem = document.getElementById('hcs-league-ongoing-container');
           var g;
           for (g = 0; g < currGamesApiResult.length; g++) {
