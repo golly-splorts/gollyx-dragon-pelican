@@ -138,7 +138,7 @@
               var teamStandings = teamStandingsItems[iS];
 
               /////////////////////////////////
-              // Add an entry for each team 
+              // Add an entry for each team
               // to the league standings page
               //
               // <li>
